@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Maps Integration</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" defer></script>
+    <style>
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+        .info-window {
+            max-width: 300px;
+        }
+        .utilization-bar {
+            height: 10px;
+            background-color: #e5e7eb;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .utilization-fill {
+            height: 100%;
+            background-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-xl font-bold text-blue-600">Portfolio Strategy</span>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Dashboard
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Properties
+                        </a>
+                        <a href="#" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Map
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Financial Analysis
+                        </a>
+                        <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            What-If Scenarios
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div class="space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold">Mastercard US Office Locations</h2>
+                <div class="flex space-x-2">
+                    <button class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Export Map
+                    </button>
+                    <button class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        View Properties
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Map Container -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Interactive Map</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Hover over locations to see utilization percentages and market data</p>
+                </div>
+                <div class="border-t border-gray-200">
+                    <div class="flex flex-col md:flex-row">
+                        <!-- Map Filters -->
+                        <div class="w-full md:w-64 bg-gray-50 p-4 border-b md:border-b-0 md:border-r border-gray-200">
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 mb-2">Map Layers</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="layer-all" name="layer" type="radio" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="layer-all" class="ml-2 block text-sm text-gray-700">
+                                                All Properties
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="layer-owned" name="layer" type="radio" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="layer-owned" class="ml-2 block text-sm text-gray-700">
+                                                Owned Properties
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="layer-leased" name="layer" type="radio" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="layer-leased" class="ml-2 block text-sm text-gray-700">
+                                                Leased Properties
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 mb-2">Visualizations</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="viz-utilization" type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="viz-utilization" class="ml-2 block text-sm text-gray-700">
+                                                Utilization Percentage
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="viz-market" type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="viz-market" class="ml-2 block text-sm text-gray-700">
+                                                Market Rental Values
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="viz-cost" type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="viz-cost" class="ml-2 block text-sm text-gray-700">
+                                                Fitout & Move Costs
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 mb-2">Property Type</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="type-hq" type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="type-hq" class="ml-2 flex items-center text-sm text-gray-700">
+                                                <span class="h-3 w-3 bg-red-500 rounded-full mr-1"></span>
+                                                Headquarters
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="type-tech" type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="type-tech" class="ml-2 flex items-center text-sm text-gray-700">
+                                                <span class="h-3 w-3 bg-blue-500 rounded-full mr-1"></span>
+                                                Tech Hubs
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="type-ops" type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="type-ops" class="ml-2 flex items-center text-sm text-gray-700">
+                                                <span class="h-3 w-3 bg-green-500 rounded-full mr-1"></span>
+                                                Operations
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="type-regional" type="checkbox" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="type-regional" class="ml-2 flex items-center text-sm text-gray-700">
+                                                <span class="h-3 w-3 bg-purple-500 rounded-full mr-1"></span>
+                                                Regional HQs
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-900 mb-2">Market Analysis</h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-center">
+                                            <input id="market-all" name="market" type="radio" checked class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="market-all" class="ml-2 block text-sm text-gray-700">
+                                                All Properties
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="market-above" name="market" type="radio" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="market-above" class="ml-2 block text-sm text-gray-700">
+                                                Above Market Rate
+                                            </label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input id="market-below" name="market" type="radio" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                            <label for="market-below" class="ml-2 block text-sm text-gray-700">
+                                                Below Market Rate
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Map View -->
+                        <div class="w-full">
+                            <div id="map" class="h-[600px]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Market Analysis -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Market Analysis</h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Comparison of current rental rates vs. market rates</p>
+                </div>
+                <div class="border-t border-gray-200">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Property
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Location
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Current Rate ($/sqft)
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Market Rate ($/sqft)
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Difference
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Utilization
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Fitout Cost ($/sqft)
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Move Cost ($)
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        Global Headquarters
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        Purchase, NY
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        Owned
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $65.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                                        Favorable
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        85%
+                                        <div class="utilization-bar">
+                                            <div class="utilization-fill" style="width: 85%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $120.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $1.2M
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        Operations Center
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        O'Fallon, MO
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        Owned
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $28.50
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                                        Favorable
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        92%
+                                        <div class="utilization-bar">
+                                            <div class="utilization-fill" style="width: 92%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $85.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $2.5M
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        New York Office
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        New York, NY
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $78.50
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $82.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                                        -4.3%
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        76%
+                                        <div class="utilization-bar">
+                                            <div class="utilization-fill" style="width: 76%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $150.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $850K
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        Arlington Office
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        Arlington, VA
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $52.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $48.50
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">
+                                        +7.2%
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        62%
+                                        <div class="utilization-bar">
+                                            <div class="utilization-fill" style="width: 62%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $110.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $420K
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        San Francisco Office
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        San Francisco, CA
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $85.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $92.50
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">
+                                        -8.1%
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        70%
+                                        <div class="utilization-bar">
+                                            <div class="utilization-fill" style="width: 70%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $175.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $580K
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        Miami Office
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        Miami, FL
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $58.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $52.50
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">
+                                        +10.5%
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        48%
+                                        <div class="utilization-bar">
+                                            <div class="utilization-fill" style="width: 48%"></div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $95.00
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        $320K
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample data for Mastercard US office locations
+        const locations = [
+            {
+                name: "Global Headquarters",
+                position: { lat: 41.0330, lng: -73.7752 }, // Purchase, NY
+                type: "Headquarters",
+                icon: "red",
+                employees: 1200,
+                capacity: 1400,
+                utilization: 85,
+                status: "Owned",
+                currentRate: "Owned",
+                marketRate: 65.00,
+                difference: "Favorable",
+                fitoutCost: 120.00,
+                moveCost: 1200000,
+                departments: "Executive, Finance, Legal, Marketing",
+                leaseExpiry: "N/A",
+                annualOpEx: 8500000,
+                financialScore: 85
+            },
+            {
+                name: "Operations Center",
+                position: { lat: 38.8106, lng: -90.6998 }, // O'Fallon, MO
+                type: "Operations",
+                icon: "green",
+                employees: 2500,
+                capacity: 2700,
+                utilization: 92,
+                status: "Owned",
+                currentRate: "Owned",
+                marketRate: 28.50,
+                difference: "Favorable",
+                fitoutCost: 85.00,
+                moveCost: 2500000,
+                departments: "Operations, Customer Service, IT",
+                leaseExpiry: "N/A",
+                annualOpEx: 12500000,
+                financialScore: 90
+            },
+            {
+                name: "New York Office",
+                position: { lat: 40.7580, lng: -73.9855 }, // New York, NY
+                type: "Tech Hub",
+                icon: "blue",
+                employees: 850,
+                capacity: 1120,
+                utilization: 76,
+                status: "Leased",
+                currentRate: 78.50,
+                marketRate: 82.00,
+                difference: -4.3,
+                fitoutCost: 150.00,
+                moveCost: 850000,
+                departments: "Technology, Digital Products",
+                leaseExpiry: "Aug 31, 2027",
+                annualOpEx: 6800000,
+                financialScore: 76
+            },
+            {
+                name: "Arlington Office",
+                position: { lat: 38.8799, lng: -77.1060 }, // Arlington, VA
+                type: "Tech Hub",
+                icon: "blue",
+                employees: 420,
+                capacity: 680,
+                utilization: 62,
+                status: "Leased",
+                currentRate: 52.00,
+                marketRate: 48.50,
+                difference: 7.2,
+                fitoutCost: 110.00,
+                moveCost: 420000,
+                departments: "Government Relations, Technology",
+                leaseExpiry: "Mar 31, 2026",
+                annualOpEx: 3200000,
+                financialScore: 62
+            },
+            {
+                name: "San Francisco Office",
+                position: { lat: 37.7749, lng: -122.4194 }, // San Francisco, CA
+                type: "Tech Hub",
+                icon: "blue",
+                employees: 580,
+                capacity: 830,
+                utilization: 70,
+                status: "Leased",
+                currentRate: 85.00,
+                marketRate: 92.50,
+                difference: -8.1,
+                fitoutCost: 175.00,
+                moveCost: 580000,
+                departments: "Technology, Innovation",
+                leaseExpiry: "Dec 31, 2028",
+                annualOpEx: 5200000,
+                financialScore: 70
+            },
+            {
+                name: "Miami Office",
+                position: { lat: 25.7617, lng: -80.1918 }, // Miami, FL
+                type: "Regional HQ",
+                icon: "purple",
+                employees: 240,
+                capacity: 500,
+                utilization: 48,
+                status: "Leased",
+                currentRate: 58.00,
+                marketRate: 52.50,
+                difference: 10.5,
+                fitoutCost: 95.00,
+                moveCost: 320000,
+                departments: "Sales, Marketing, Regional Management",
+                leaseExpiry: "Dec 31, 2025",
+                annualOpEx: 2800000,
+                financialScore: 48
+            }
+        ];
+
+        // Initialize Google Maps
+        function initMap() {
+            // Create the map centered on the US
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: { lat: 39.8283, lng: -98.5795 }, // Center of the US
+                mapTypeId: "roadmap",
+                mapTypeControl: true,
+                streetViewControl: false,
+                fullscreenControl: true,
+                zoomControl: true
+            });
+
+            // Create markers for each location
+            locations.forEach(location => {
+                // Determine marker color based on property type
+                let markerColor;
+                switch(location.type) {
+                    case "Headquarters":
+                        markerColor = "red";
+                        break;
+                    case "Operations":
+                        markerColor = "green";
+                        break;
+                    case "Tech Hub":
+                        markerColor = "blue";
+                        break;
+                    case "Regional HQ":
+                        markerColor = "purple";
+                        break;
+                    default:
+                        markerColor = "gray";
+                }
+
+                // Create marker
+                const marker = new google.maps.Marker({
+                    position: location.position,
+                    map: map,
+                    title: location.name,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        fillColor: markerColor,
+                        fillOpacity: 0.9,
+                        strokeWeight: 1,
+                        strokeColor: "#ffffff",
+                        scale: 10
+                    }
+                });
+
+                // Create info window content
+                const contentString = `
+                    <div class="info-window">
+                        <h3 class="text-lg font-medium text-gray-900">${location.name}</h3>
+                        <p class="text-sm text-gray-500">${location.type}</p>
+                        <div class="mt-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Utilization:</span>
+                                <span class="font-medium">${location.utilization}%</span>
+                            </div>
+                            <div class="utilization-bar">
+                                <div class="utilization-fill" style="width: ${location.utilization}%; background-color: ${location.utilization < 60 ? '#ef4444' : location.utilization < 80 ? '#f59e0b' : '#22c55e'}"></div>
+                            </div>
+                            <div class="flex justify-between text-sm mt-1">
+                                <span class="text-gray-500">Employees:</span>
+                                <span class="font-medium">${location.employees} / ${location.capacity}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Status:</span>
+                                <span class="font-medium">${location.status}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Current Rate:</span>
+                                <span class="font-medium">${typeof location.currentRate === 'number' ? '$' + location.currentRate.toFixed(2) + '/sqft' : location.currentRate}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Market Rate:</span>
+                                <span class="font-medium">$${location.marketRate.toFixed(2)}/sqft</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Difference:</span>
+                                <span class="font-medium ${typeof location.difference === 'number' ? (location.difference < 0 ? 'text-green-600' : 'text-red-600') : 'text-green-600'}">${typeof location.difference === 'number' ? (location.difference < 0 ? location.difference.toFixed(1) + '%' : '+' + location.difference.toFixed(1) + '%') : location.difference}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Fitout Cost:</span>
+                                <span class="font-medium">$${location.fitoutCost.toFixed(2)}/sqft</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">Move Cost:</span>
+                                <span class="font-medium">$${(location.moveCost / 1000000).toFixed(1)}M</span>
+                            </div>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-gray-200">
+                            <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View Property Details</a>
+                        </div>
+                    </div>
+                `;
+
+                // Create info window
+                const infoWindow = new google.maps.InfoWindow({
+                    content: contentString,
+                    maxWidth: 300
+                });
+
+                // Add click event to marker
+                marker.addListener("click", () => {
+                    infoWindow.open(map, marker);
+                });
+
+                // Add hover event to marker (mouseover and mouseout)
+                marker.addListener("mouseover", () => {
+                    infoWindow.open(map, marker);
+                });
+
+                marker.addListener("mouseout", () => {
+                    setTimeout(() => {
+                        if (!infoWindow.getMap() || (infoWindow.getMap() && !infoWindow.getMap().getBounds().contains(marker.getPosition()))) {
+                            infoWindow.close();
+                        }
+                    }, 1000);
+                });
+            });
+        }
+
+        // Call initMap function when the page loads
+        window.onload = initMap;
+    </script>
+</body>
+</html>

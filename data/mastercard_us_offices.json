@@ -1,0 +1,359 @@
+{
+  "offices": [
+    {
+      "id": 1,
+      "name": "Global Headquarters",
+      "address": "2000 Purchase Street",
+      "city": "Purchase",
+      "state": "NY",
+      "zip": "10577",
+      "country": "United States",
+      "phone": "+1.914.249.2000",
+      "type": "Headquarters",
+      "coordinates": {
+        "lat": 41.0464,
+        "lng": -73.7142
+      },
+      "employees": 1200,
+      "departments": ["Executive", "Finance", "Legal", "Marketing", "HR"],
+      "lease": {
+        "expiry": "2030-12-31",
+        "annual_rent": 12500000,
+        "owned": true
+      },
+      "opex": {
+        "annual": 8500000,
+        "utilities": 2100000,
+        "maintenance": 1800000,
+        "security": 950000,
+        "other": 3650000
+      },
+      "capex": {
+        "ongoing_projects": [
+          {
+            "name": "Lobby Renovation",
+            "budget": 3500000,
+            "completion_date": "2025-09-30"
+          },
+          {
+            "name": "HVAC Upgrade",
+            "budget": 2800000,
+            "completion_date": "2026-03-31"
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "name": "Operations Center",
+      "address": "2200 Mastercard Blvd",
+      "city": "O'Fallon",
+      "state": "MO",
+      "zip": "63368",
+      "country": "United States",
+      "phone": "+1.636.722.6700",
+      "type": "Operations",
+      "coordinates": {
+        "lat": 38.8006,
+        "lng": -90.7662
+      },
+      "employees": 2500,
+      "departments": ["Technology", "Operations", "Customer Service", "Data Center"],
+      "lease": {
+        "expiry": "2035-06-30",
+        "annual_rent": 0,
+        "owned": true
+      },
+      "opex": {
+        "annual": 14200000,
+        "utilities": 4500000,
+        "maintenance": 3200000,
+        "security": 1800000,
+        "other": 4700000
+      },
+      "capex": {
+        "ongoing_projects": [
+          {
+            "name": "Data Center Expansion",
+            "budget": 18500000,
+            "completion_date": "2026-12-31"
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "name": "New York Office",
+      "address": "150 5th Ave",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10011",
+      "country": "United States",
+      "phone": "+1.212.365.3500",
+      "type": "Tech Hub",
+      "coordinates": {
+        "lat": 40.7395,
+        "lng": -73.9905
+      },
+      "employees": 850,
+      "departments": ["Technology", "Innovation", "Digital Products", "Design"],
+      "lease": {
+        "expiry": "2027-08-31",
+        "annual_rent": 9800000,
+        "owned": false
+      },
+      "opex": {
+        "annual": 6200000,
+        "utilities": 1200000,
+        "maintenance": 950000,
+        "security": 750000,
+        "other": 3300000
+      },
+      "capex": {
+        "ongoing_projects": [
+          {
+            "name": "Innovation Lab Expansion",
+            "budget": 4200000,
+            "completion_date": "2025-11-30"
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "name": "Arlington Office",
+      "address": "4250 Fairfax Dr 11th floor",
+      "city": "Arlington",
+      "state": "VA",
+      "zip": "22203",
+      "country": "United States",
+      "phone": "+1.571.526.5000",
+      "type": "Tech Hub",
+      "coordinates": {
+        "lat": 38.8816,
+        "lng": -77.1127
+      },
+      "employees": 420,
+      "departments": ["Government Relations", "Public Policy", "Cybersecurity"],
+      "lease": {
+        "expiry": "2026-03-31",
+        "annual_rent": 3800000,
+        "owned": false
+      },
+      "opex": {
+        "annual": 2900000,
+        "utilities": 580000,
+        "maintenance": 420000,
+        "security": 350000,
+        "other": 1550000
+      },
+      "capex": {
+        "ongoing_projects": []
+      }
+    },
+    {
+      "id": 5,
+      "name": "San Francisco Office",
+      "address": "123 Mission Street 4th & 5th Floor",
+      "city": "San Francisco",
+      "state": "CA",
+      "zip": "94105",
+      "country": "United States",
+      "phone": "+1.415.547.2000",
+      "type": "Tech Hub",
+      "coordinates": {
+        "lat": 37.7909,
+        "lng": -122.3946
+      },
+      "employees": 580,
+      "departments": ["Technology", "Product Development", "Partnerships", "Ventures"],
+      "lease": {
+        "expiry": "2028-05-31",
+        "annual_rent": 7200000,
+        "owned": false
+      },
+      "opex": {
+        "annual": 4800000,
+        "utilities": 920000,
+        "maintenance": 680000,
+        "security": 520000,
+        "other": 2680000
+      },
+      "capex": {
+        "ongoing_projects": [
+          {
+            "name": "Workspace Modernization",
+            "budget": 2800000,
+            "completion_date": "2025-08-31"
+          }
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "name": "Miami Office",
+      "address": "801 Brickell Ave #1300",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33131",
+      "country": "United States",
+      "phone": "+1.305.539.5000",
+      "type": "Regional Headquarters",
+      "coordinates": {
+        "lat": 25.7650,
+        "lng": -80.1936
+      },
+      "employees": 320,
+      "departments": ["Latin America Operations", "Business Development", "Marketing"],
+      "lease": {
+        "expiry": "2027-12-31",
+        "annual_rent": 3600000,
+        "owned": false
+      },
+      "opex": {
+        "annual": 2400000,
+        "utilities": 480000,
+        "maintenance": 360000,
+        "security": 280000,
+        "other": 1280000
+      },
+      "capex": {
+        "ongoing_projects": []
+      }
+    },
+    {
+      "id": 7,
+      "name": "Kansas City Office",
+      "address": "11530 N Ambassador Dr",
+      "city": "Kansas City",
+      "state": "MO",
+      "zip": "64153",
+      "country": "United States",
+      "phone": "+1.816.545.2000",
+      "type": "Operations",
+      "coordinates": {
+        "lat": 39.2968,
+        "lng": -94.7177
+      },
+      "employees": 280,
+      "departments": ["Operations", "Customer Support", "Processing"],
+      "lease": {
+        "expiry": "2026-09-30",
+        "annual_rent": 2200000,
+        "owned": false
+      },
+      "opex": {
+        "annual": 1900000,
+        "utilities": 380000,
+        "maintenance": 290000,
+        "security": 230000,
+        "other": 1000000
+      },
+      "capex": {
+        "ongoing_projects": []
+      }
+    },
+    {
+      "id": 8,
+      "name": "Chicago Office",
+      "address": "550 W Jackson Blvd",
+      "city": "Chicago",
+      "state": "IL",
+      "zip": "60661",
+      "country": "United States",
+      "phone": "+1.312.649.3000",
+      "type": "Tech Hub",
+      "coordinates": {
+        "lat": 41.8781,
+        "lng": -87.6298
+      },
+      "employees": 350,
+      "departments": ["Technology", "Data Analytics", "Merchant Solutions"],
+      "lease": {
+        "expiry": "2027-06-30",
+        "annual_rent": 3900000,
+        "owned": false
+      },
+      "opex": {
+        "annual": 2700000,
+        "utilities": 540000,
+        "maintenance": 410000,
+        "security": 320000,
+        "other": 1430000
+      },
+      "capex": {
+        "ongoing_projects": [
+          {
+            "name": "Office Expansion",
+            "budget": 1800000,
+            "completion_date": "2025-12-31"
+          }
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "name": "Boston Office",
+      "address": "125 High Street",
+      "city": "Boston",
+      "state": "MA",
+      "zip": "02110",
+      "country": "United States",
+      "phone": "+1.617.772.5000",
+      "type": "Tech Hub",
+      "coordinates": {
+        "lat": 42.3601,
+        "lng": -71.0589
+      },
+      "employees": 290,
+      "departments": ["Research", "Innovation", "Digital Identity"],
+      "lease": {
+        "expiry": "2026-11-30",
+        "annual_rent": 3400000,
+        "owned": false
+      },
+      "opex": {
+        "annual": 2300000,
+        "utilities": 460000,
+        "maintenance": 350000,
+        "security": 270000,
+        "other": 1220000
+      },
+      "capex": {
+        "ongoing_projects": []
+      }
+    },
+    {
+      "id": 10,
+      "name": "Atlanta Office",
+      "address": "1100 Peachtree Street NE",
+      "city": "Atlanta",
+      "state": "GA",
+      "zip": "30309",
+      "country": "United States",
+      "phone": "+1.404.504.5000",
+      "type": "Tech Hub",
+      "coordinates": {
+        "lat": 33.7490,
+        "lng": -84.3880
+      },
+      "employees": 260,
+      "departments": ["Technology", "Fraud Prevention", "Customer Experience"],
+      "lease": {
+        "expiry": "2026-08-31",
+        "annual_rent": 2800000,
+        "owned": false
+      },
+      "opex": {
+        "annual": 1800000,
+        "utilities": 360000,
+        "maintenance": 270000,
+        "security": 210000,
+        "other": 960000
+      },
+      "capex": {
+        "ongoing_projects": []
+      }
+    }
+  ]
+}
