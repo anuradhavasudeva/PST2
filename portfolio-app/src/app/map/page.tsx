@@ -1,4 +1,4 @@
-'use client';
+"use client"
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -252,7 +252,7 @@ export default function MapPage() {
     if (!window.google) {
       // For a real application, you would use an actual API key
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=DEMO_KEY&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
       script.async = true;
       script.defer = true;
       script.onload = () => {
